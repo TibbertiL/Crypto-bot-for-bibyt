@@ -1,18 +1,18 @@
 package com.tibbertil.botforbibyt.dto;
 
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
+@Builder
 public class StatusResponseDto {
 
     private String status;
     private String message;
 
     public static StatusResponseDto ok() {
-        StatusResponseDto statusResponseDto = new StatusResponseDto();
-        statusResponseDto.setStatus("OK");
-        return statusResponseDto;
+        return StatusResponseDto.builder()
+                .status("OK")
+                .build();
     }
 }

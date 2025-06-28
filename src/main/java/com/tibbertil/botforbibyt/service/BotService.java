@@ -17,6 +17,7 @@ import com.tibbertil.botforbibyt.entity.PriceTickEntity;
 import com.tibbertil.botforbibyt.entity.Status;
 import com.tibbertil.botforbibyt.entity.StrategyConfigEntity;
 import com.tibbertil.botforbibyt.exception.EntityNotFoundException;
+import com.tibbertil.botforbibyt.exception.FetchPriceException;
 import com.tibbertil.botforbibyt.repository.LogEventRepository;
 import com.tibbertil.botforbibyt.repository.OrderHistoryRepository;
 import com.tibbertil.botforbibyt.repository.PriceRickRepository;
@@ -72,8 +73,8 @@ public class BotService {
             return new BigDecimal(lastPrice);
         } catch (Exception e) {
             logger.log(Level.ERROR, "Ошибка при получении цены с Bybit: " + e.getMessage(), "BotService");
+            throw new FetchPriceException("Ошибка при получении цены с Bybit: " + e.getMessage());
         }
-        return BigDecimal.ZERO;
     }
 
 
@@ -87,7 +88,7 @@ public class BotService {
         return modelMapper.map(priceTickEntityList, new TypeToken<List<CoinDto>>() {}.getType());
         //Ты хочешь преобразовать список List<PriceTickEntity> в List<CoinDto>. Но Java работает с type erasure — то есть
         // она во время выполнения не знает, что это список CoinDto, а не просто List.
-        //ModelMapper должен точно знать тип назначения, и тут на помощь приходит TypeToken.
+        // ModelMapper должен точно знать тип назначения, и тут на помощь приходит TypeToken.
     }
 
     public List<StrategyDto> listOfStrategies() {
@@ -108,7 +109,6 @@ public class BotService {
         StrategyConfigEntity entity = strategyConfigRepository.findById(id)
                         .orElseThrow(() -> new EntityNotFoundException("Strategy not found with id: " + id));
 
-        // Обновляем только нужные поля
         if (strategyDto.getBuyBelow() != null) {
             entity.setBuyBelow(strategyDto.getBuyBelow());
         }
@@ -144,7 +144,7 @@ public class BotService {
     public void updateRealPrice(String symbol) {
         BigDecimal price = fetchPriceFromBybit(symbol);
         if (price.compareTo(BigDecimal.ZERO) > 0) {
-            updatePrice(symbol, price); // твой уже готовый метод
+            updatePrice(symbol, price);
         }
     }
 
@@ -198,7 +198,6 @@ public class BotService {
                 .orElseThrow(() -> new EntityNotFoundException("Strategy not found with id: " + id));
 
         strategyConfigRepository.delete(entity);
-
         return StatusResponseDto.ok();
     }
 }

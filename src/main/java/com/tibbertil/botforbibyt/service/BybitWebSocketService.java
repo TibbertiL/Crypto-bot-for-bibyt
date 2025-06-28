@@ -2,8 +2,6 @@ package com.tibbertil.botforbibyt.service;
 
 import com.tibbertil.botforbibyt.Logger;
 import com.tibbertil.botforbibyt.entity.Level;
-import com.tibbertil.botforbibyt.entity.LogEventEntity;
-import com.tibbertil.botforbibyt.repository.LogEventRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.java_websocket.client.WebSocketClient;
@@ -12,7 +10,6 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service

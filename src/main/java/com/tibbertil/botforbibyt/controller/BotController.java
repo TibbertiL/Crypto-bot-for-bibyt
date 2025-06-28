@@ -6,6 +6,7 @@ import com.tibbertil.botforbibyt.dto.OrderDto;
 import com.tibbertil.botforbibyt.dto.StatusResponseDto;
 import com.tibbertil.botforbibyt.dto.StrategyDto;
 import com.tibbertil.botforbibyt.service.BotService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,14 +43,14 @@ public class BotController {
     //📄 POST /api/strategy
     //Создать стратегию.
     @PostMapping("/strategy")
-    public StrategyDto createStrategy(@RequestBody StrategyDto strategyDto){
+    public StrategyDto createStrategy(@Valid @RequestBody StrategyDto strategyDto){
         return botService.createStrategy(strategyDto);
     }
 
     //📄 PUT /api/strategy/{id}
     //Обновить параметры стратегии (buyBelow, sellAbove и т.д.).
     @PutMapping("/strategy/{id}")
-    public StrategyDto editStrategy(@PathVariable Long id, @RequestBody StrategyDto strategyDto) throws Exception {
+    public StrategyDto editStrategy(@Valid @PathVariable Long id, @RequestBody StrategyDto strategyDto) throws Exception {
         return botService.editStrategy(id, strategyDto);
     }
 
